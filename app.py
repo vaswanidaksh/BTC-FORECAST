@@ -220,9 +220,9 @@ with st.spinner("Fetching latest BTC data and running model..."):
         c3.metric("Predicted High (95% CI)", f"${high95:,.2f}")
 
         st.info(
-            f"**Next hour forecast:** BTC has a 95% chance of being between "
-            f"**${low95:,.2f}** and **${high95:,.2f}**  |  "
-            f"Range width: **${high95 - low95:,.2f}**"
+            f"Next hour forecast: BTC has a 95% chance of being between "
+            f"${low95:,.2f} and ${high95:,.2f}  |  "
+            f"Range width: ${high95 - low95:,.2f}"
         )
 
         # ── Chart ─────────────────────────────────────────────────────────────
