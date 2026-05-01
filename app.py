@@ -134,16 +134,22 @@ def load_and_update_history(prices):
         return []
 
     # Build a lookup: hour timestamp → actual close price
-    price_lookup = {
-        str(ts): price
-        for ts, price in prices.items()
-    }
+    price_lookup = {}
+    for ts, price in prices.items():
+        price_lookup[str(ts)] = price
+        price_lookup[ts.strftime("%Y-%m-%d %H:%M:%S")] = price
+        price_lookup[str(ts)[:16]] = price
+    
 
     updated = False
     for rec in records:
         if rec["actual_price"] is None:
             # Check if target hour has closed and we have the actual price
-            actual = price_lookup.get(rec["target_hour"])
+            actual = (
+                price_lookup.get(rec["target_hour"]) or
+                price_lookup.get(rec["target_hour"][:16]) or
+                price_lookup.get(str(pd.Timestamp(rec["target_hour"])))
+                )
             if actual:
                 rec["actual_price"] = round(actual, 2)
                 rec["hit"] = int(rec["low_95"] <= actual <= rec["high_95"])
